@@ -1,0 +1,102 @@
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author w1549895
+ */
+public class addexcel {
+    
+    public static void main(String[] args) { 
+        
+        
+        Connection connection = null; 
+        try{ 
+            
+            try {
+
+                 Class.forName("com.mysql.jdbc.Driver");
+                        } catch (ClassNotFoundException e) {
+                            System.out.println("ERROR: MySQL JDBC Driver not found; is your CLASSPATH set?");
+                            e.printStackTrace();
+                            return;
+                        }
+            
+                        
+            connection = DriverManager.getConnection("jdbc:mysql://elephant.ecs.westminster.ac.uk:3306/w1549895_0",
+                                "w1549895", "qlHyxUJpoxxK");
+        } catch (SQLException e) {
+                        System.out.println("ERROR: MySQL Connection Failed!");
+                        e.printStackTrace();
+                        return;
+                    }
+         Statement stmt = null;
+        
+       
+                    try // create a Statement for the SQL query
+                    {
+                        stmt = connection.createStatement();
+                    } catch (SQLException e) {
+                        System.out.println("ERROR: Failed to create Statement.");
+                        e.printStackTrace();
+                        return;
+                    }       
+        try { 
+             FileInputStream fstream = new FileInputStream("Bologna.csv");
+             DataInputStream in = new DataInputStream(fstream);
+             BufferedReader br = new BufferedReader(new InputStreamReader(in));
+             String strLine;
+             ArrayList list = new ArrayList();
+             while ((strLine = br.readLine()) != null) {
+                //System.out.println("list"+list);
+                list.add(strLine);
+             }
+             System.out.println("list" + list);
+                         Iterator itr;
+            for (itr = list.iterator(); itr.hasNext();) {
+                
+                String str = itr.next().toString();
+                String[] splitSt = str.split(",");
+                String name = "", host_name = "", neighbour = "", price = "";
+                for (int i = 0; i < splitSt.length; i++) {
+                    name = splitSt[0];
+                    host_name = splitSt[1];
+                    neighbour = splitSt[2];
+                    price = splitSt[3];
+                }
+                System.out.println("sql execution");
+                stmt.executeUpdate("insert into DataAirbnb(name,host_name,neighbour,price) values('" + name + "','" + host_name + "','" + neighbour + "','" + price + "')");
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+           
+        }
+        try // close the connection now we've finished with it.
+                    {
+                        connection.close();
+                    } catch (SQLException e) {
+                        System.out.println("WARNING: Failed to close database!");
+                        e.printStackTrace();
+                        return;
+                    }
+    }
+}
