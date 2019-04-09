@@ -1,0 +1,46 @@
+package sql1;
+
+/**
+ *
+ * @author w1649686
+ */
+public class User {
+    private String host_name;
+    private String neighbourhood;
+    private String room_type;
+    private int price;
+  
+ 
+    
+    public User(String host_name, String neighbourhood, String room_type, int price ){
+        
+        this.host_name = host_name;
+        this.neighbourhood = neighbourhood;
+        this.room_type = room_type;
+        this.price = price;
+
+        
+    }
+    
+    public String gethost_name(){
+        return host_name;
+    }
+    
+    public String getneighbourhood(){
+        return neighbourhood;
+       
+    }
+    
+    
+    public String getroom_type(){
+        return room_type;
+        
+    }
+    
+    public int getprice(){
+        return price;
+        
+    }
+    
+}
+
